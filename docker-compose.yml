@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+
+  database:
+    image: mysql
+    restart: always
+    ports:
+      - ${SISTEMA_AAC_MYSQL_PORT}:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SISTEMA_AAC_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${SISTEMA_AAC_MYSQL_DATABASE}
+
+  backend:
+    build: backend
+    restart: always
+    ports:
+      - ${SISTEMA_AAC_BACKEND_PORT}:8080
+    environment:
+      SPRING_PROFILES_ACTIVE: server
+      MYSQL_HOST: database
+      MYSQL_PORT: ${SISTEMA_AAC_MYSQL_PORT}
+      MYSQL_DATABASE: ${SISTEMA_AAC_MYSQL_DATABASE}
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: ${SISTEMA_AAC_MYSQL_ROOT_PASSWORD}
+
+  frontend:
+    build: frontend
+    restart: always
+    ports:
+      - ${SISTEMA_AAC_FRONTEND_PORT}:80
